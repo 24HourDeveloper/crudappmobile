@@ -20,7 +20,6 @@ export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      text: "Hey",
       fname: "",
       lname: "",
       bText: "",
@@ -43,22 +42,16 @@ export default class App extends Component {
       .then(response => response)
       .then(resJson => resJson._bodyText)
       .then(name => {
-        const temp = JSON.parse(name);
-        this.setState({ data: temp });
-        //console.log(temp);
-
-        return this.setState({ text: temp });
+        const parsedResponse = JSON.parse(name);
+        this.setState({ data: parsedResponse });
       })
       .catch(err => {
         console.log(err);
       });
     return bug;
   }
-  changedText = typedText => {
-    this.setState({ fname: typedText });
-  };
-  changedText2 = typedText => {
-    this.setState({ lname: typedText });
+  changedText = (typedText, field) => {
+    this.setState({ [field]: typedText });
   };
 
   insertUser() {
@@ -76,38 +69,23 @@ export default class App extends Component {
     //   .then(response => response)
     //   .then(res => console.log(res.json.first))
     //   .catch(err => console.log(err));
-    console.log(this.setState({ bText: this.state.fname }));
-    this.setState({ lText: this.state.lname });
+    console.log(this.setState({ userFirstName: this.state.fname }));
+    this.setState({ userLastName: this.state.lname });
   }
 
   render() {
-    //Looping through fetch response
-    // // const arr = this.state.text;
-    // // const names = [];
-    // // for (let i = 0; i < arr.length; i++) {
-    // //   names.push(
-    // //     <View key={i}>
-    // //       <Text style={styles.textStyles}>
-    // //         {arr[i].id}) {arr[i].first_name} - {arr[i].last_name}
-    // //       </Text>
-    // //     </View>
-    // //   );
-    // }
-
     return (
       <View style={styles.container}>
         <TextInput
           placeholder="Enter First Name"
-          value={this.state.fname}
-          onChangeText={this.changedText}
+          onChangeText={text => this.changedText(text, "fname")}
         />
         <TextInput
           placeholder="Enter Last Name"
-          value={this.state.lname}
-          onChangeText={this.changedText2}
+          onChangeText={text => this.changedText(text, "lname")}
         />
         <Text>
-          {this.state.bText} - {this.state.lText}
+          {this.state.userFirstName} - {this.state.userLastName}
         </Text>
         <Button title="Add User" onPress={this.insertUser} />
         <View style={styles.container2}>
@@ -125,8 +103,6 @@ export default class App extends Component {
           )}
           keyExtractor={(item, index) => index.toString()}
         />
-
-        {/* {names} reference to for loop*/}
       </View>
     );
   }
