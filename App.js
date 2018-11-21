@@ -48,30 +48,26 @@ export default class App extends Component {
       .catch(err => {
         console.log(err);
       });
-    return bug;
   }
   changedText = (typedText, field) => {
     this.setState({ [field]: typedText });
   };
 
-  insertUser() {
-    // fetch("https://infinite-reaches-76044.herokuapp.com/useradded", {
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     first: "Hello",
-    //     second: "Bye"
-    //   })
-    // })
-    //   .then(response => response)
-    //   .then(res => console.log(res.json.first))
-    //   .catch(err => console.log(err));
-    console.log(this.setState({ userFirstName: this.state.fname }));
+  insertUser = () => {
+    const data = { first: "Hello", last: "Bye" };
+    fetch("https://infinite-reaches-76044.herokuapp.com/useradded", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => console.log(response))
+      .catch(err => console.log(err));
+
+    //console.log(this.setState({ userFirstName: this.state.fname }));
     this.setState({ userLastName: this.state.lname });
-  }
+  };
 
   render() {
     return (
