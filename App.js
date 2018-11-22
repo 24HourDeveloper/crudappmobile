@@ -54,11 +54,12 @@ export default class App extends Component {
   };
 
   insertUser = () => {
-    const data = { first: "Hello", last: "Bye" };
-    fetch("https://infinite-reaches-76044.herokuapp.com/useradded", {
+    const data = { name1: this.state.fname, name2: this.state.lname };
+    fetch("https://infinite-reaches-76044.herokuapp.com/useradded2", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json"
       }
     })
@@ -66,7 +67,7 @@ export default class App extends Component {
       .catch(err => console.log(err));
 
     //console.log(this.setState({ userFirstName: this.state.fname }));
-    this.setState({ userLastName: this.state.lname });
+    //this.setState({ userLastName: this.state.lname });
   };
 
   render() {
