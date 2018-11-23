@@ -15,6 +15,8 @@ import {
   Button,
   FlatList
 } from "react-native";
+import Header from "./src/component/Header";
+import CustomButton from "./src/component/CustomButton";
 
 export default class App extends Component {
   constructor() {
@@ -22,8 +24,6 @@ export default class App extends Component {
     this.state = {
       fname: "",
       lname: "",
-      bText: "",
-      lText: "",
       data: []
     };
     this.handlePress = this.handlePress.bind(this);
@@ -31,7 +31,6 @@ export default class App extends Component {
   }
 
   handlePress() {
-    let bug;
     return fetch("https://infinite-reaches-76044.herokuapp.com/", {
       method: "GET",
       headers: {
@@ -63,31 +62,36 @@ export default class App extends Component {
         "Content-Type": "application/json"
       }
     })
-      .then(response => console.log(response))
+      .then(response => {
+        console.log(response);
+      })
       .catch(err => console.log(err));
-
-    //console.log(this.setState({ userFirstName: this.state.fname }));
-    //this.setState({ userLastName: this.state.lname });
   };
 
   render() {
     return (
-      <View style={styles.container}>
+      <View>
+        <Header>
+          <Text style={styles.textStyles}>Add User</Text>
+        </Header>
         <TextInput
+          style={styles.inputStyle}
           placeholder="Enter First Name"
           onChangeText={text => this.changedText(text, "fname")}
         />
         <TextInput
+          style={styles.inputStyle}
           placeholder="Enter Last Name"
           onChangeText={text => this.changedText(text, "lname")}
         />
-        <Text>
-          {this.state.userFirstName} - {this.state.userLastName}
-        </Text>
-        <Button title="Add User" onPress={this.insertUser} />
-        <View style={styles.container2}>
-          <Button title="Submit" onPress={this.handlePress} />
-        </View>
+
+        <CustomButton onPress={this.insertUser}>
+          <Text style={styles.buttonText}>Add User</Text>
+        </CustomButton>
+
+        <CustomButton onPress={this.handlePress}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </CustomButton>
         <Text style={{ fontSize: 30 }}>List Of Names</Text>
         <FlatList
           data={this.state.data}
@@ -112,10 +116,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5FCFF",
     margin: 10
   },
-  container2: {
-    marginTop: 10
-  },
   textStyles: {
+    fontSize: 30,
+    margin: 10,
+    color: "#fff",
+    fontWeight: "bold"
+  },
+  buttonText: {
+    fontSize: 20,
+    color: "#00A86B"
+  },
+  inputStyle: {
     fontSize: 20,
     margin: 10
   }
