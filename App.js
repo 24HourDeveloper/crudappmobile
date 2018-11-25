@@ -1,20 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  FlatList
-} from "react-native";
+import { StyleSheet, Text, View, TextInput, FlatList } from "react-native";
 import Header from "./src/component/Header";
 import CustomButton from "./src/component/CustomButton";
 
@@ -26,28 +11,11 @@ export default class App extends Component {
       lname: "",
       data: []
     };
-    this.handlePress = this.handlePress.bind(this);
+
     this.insertUser = this.insertUser.bind(this);
+    this.changedText = this.changedText.bind(this);
   }
 
-  handlePress() {
-    return fetch("https://infinite-reaches-76044.herokuapp.com/", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => response)
-      .then(resJson => resJson._bodyText)
-      .then(name => {
-        const parsedResponse = JSON.parse(name);
-        this.setState({ data: parsedResponse });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
   changedText = (typedText, field) => {
     this.setState({ [field]: typedText });
   };
@@ -66,6 +34,24 @@ export default class App extends Component {
         console.log(response);
       })
       .catch(err => console.log(err));
+  };
+  getListOfNames = () => {
+    return fetch("https://infinite-reaches-76044.herokuapp.com/", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => response)
+      .then(resJson => resJson._bodyText)
+      .then(name => {
+        const parsedResponse = JSON.parse(name);
+        this.setState({ data: parsedResponse });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   render() {
@@ -89,20 +75,20 @@ export default class App extends Component {
           <Text style={styles.buttonText}>Add User</Text>
         </CustomButton>
 
-        <CustomButton onPress={this.handlePress}>
+        <CustomButton onPress={this.getListOfNames.bind(this)}>
           <Text style={styles.buttonText}>Submit</Text>
         </CustomButton>
-        <Text style={{ fontSize: 30 }}>List Of Names</Text>
+
         <FlatList
           data={this.state.data}
           renderItem={({ item }) => (
-            <View style={styles.container2}>
+            <View style={{ marginBottom: 30 }}>
               <Text style={{ fontSize: 20 }}>
                 {item.first_name} - {item.last_name}
               </Text>
             </View>
           )}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={item => item.id.toString()}
         />
       </View>
     );

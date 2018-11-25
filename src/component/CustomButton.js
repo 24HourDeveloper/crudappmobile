@@ -1,9 +1,9 @@
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 const CustomButton = props => {
   return (
-    <TouchableOpacity onPress={props.onPress} style={styles.buttonStyle}>
+    <TouchableOpacity style={styles.buttonStyle} onPress={props.onPress}>
       {props.children}
     </TouchableOpacity>
   );
