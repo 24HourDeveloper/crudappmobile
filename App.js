@@ -1,15 +1,17 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TextInput, FlatList } from "react-native";
+import { StyleSheet, Text, View, TextInput } from "react-native";
+import { createStackNavigator, createAppContainer } from "react-navigation";
 import Header from "./src/component/Header";
 import CustomButton from "./src/component/CustomButton";
+import UserListScreen from "./src/component/UserListScreen";
 
-export default class App extends Component {
+class AddUserScreen extends Component {
   constructor() {
     super();
     this.state = {
       fname: "",
-      lname: "",
-      data: []
+      lname: ""
+      //data: []
     };
 
     this.insertUser = this.insertUser.bind(this);
@@ -35,24 +37,24 @@ export default class App extends Component {
       })
       .catch(err => console.log(err));
   };
-  getListOfNames = () => {
-    return fetch("https://infinite-reaches-76044.herokuapp.com/", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => response)
-      .then(resJson => resJson._bodyText)
-      .then(name => {
-        const parsedResponse = JSON.parse(name);
-        this.setState({ data: parsedResponse });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+  // getListOfNames = () => {
+  //   return fetch("https://infinite-reaches-76044.herokuapp.com/", {
+  //     method: "GET",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //     .then(response => response)
+  //     .then(resJson => resJson._bodyText)
+  //     .then(name => {
+  //       const parsedResponse = JSON.parse(name);
+  //       this.setState({ data: parsedResponse });
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
 
   render() {
     return (
@@ -72,14 +74,20 @@ export default class App extends Component {
         />
 
         <CustomButton onPress={this.insertUser}>
-          <Text style={styles.buttonText}>Add User</Text>
-        </CustomButton>
-
-        <CustomButton onPress={this.getListOfNames.bind(this)}>
           <Text style={styles.buttonText}>Submit</Text>
         </CustomButton>
 
-        <FlatList
+        {/* <CustomButton onPress={this.getListOfNames.bind(this)}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </CustomButton> */}
+
+        <CustomButton
+          onPress={() => this.props.navigation.navigate("UserList")}
+        >
+          <Text style={styles.buttonText}>Go To Update User Page</Text>
+        </CustomButton>
+
+        {/* <FlatList
           data={this.state.data}
           renderItem={({ item }) => (
             <View style={{ marginBottom: 30 }}>
@@ -89,11 +97,23 @@ export default class App extends Component {
             </View>
           )}
           keyExtractor={item => item.id.toString()}
-        />
+        /> */}
       </View>
     );
   }
 }
+
+const AppNavigator = createStackNavigator(
+  {
+    AddUser: AddUserScreen,
+    UserList: UserListScreen
+  },
+  {
+    initialRouteName: "AddUser"
+  }
+);
+
+export default createAppContainer(AppNavigator);
 
 const styles = StyleSheet.create({
   container: {
